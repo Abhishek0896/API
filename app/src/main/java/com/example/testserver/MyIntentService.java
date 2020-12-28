@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.testserver.model.User;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class MyIntentService extends IntentService {
 
     public static final String SERVICE_PAYLOAD = "SERVICE_PAYLOAD";
     public static final String SERVICE_MESSAGE = "SERVICE_MESSAGE";
+    public static final String SERVICE_EXCEPTION="SERVICE_EXCEPTION";
 
 
     public MyIntentService() {
@@ -44,12 +46,13 @@ public class MyIntentService extends IntentService {
         }
 
         Gson gson = new Gson();
-        Example example= gson.fromJson(data,Example.class);
-        Log.d("TESTING",example.getData().getItemId());
+        User[] example= gson.fromJson(data, User[].class);
+        sendMessagetoUI(example);
+//        Log.d("TESTING",example.getData().getItemId());
 
     }
 
-    private void sendMessagetoUI( String data) {
+    private void sendMessagetoUI( User[] data) {
         Intent intent = new Intent(SERVICE_MESSAGE);
         intent.putExtra(SERVICE_PAYLOAD,data);
 

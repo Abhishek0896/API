@@ -18,14 +18,15 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_OUTPUT = "LOG_OUTPUT";
     public static final String JSON_URL ="https://fortnite-api.theapinetwork.com/store/get/";
+    public static final String WEB_URL="https://jsonplaceholder.typicode.com/photos";
     TextView tvload;
-    Button startbtn;
+    Button startbtn,btn;
     boolean isNetwork;
     private BroadcastReceiver mreciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String data = intent.getStringExtra(MyIntentService.SERVICE_PAYLOAD);
-            Logoutput(data);
+//            Logoutput(data);
         }
     };
 
@@ -45,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         isNetwork = NetworkHelper.isNetworkAvailable(this);
 //        Logoutput("Network "+isNetwork);
 
+        btn = findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ListActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -57,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Network not available...!!!", Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void Logoutput(String data){
-        Log.d(LOG_OUTPUT,data);
-        tvload.append(data+"\n");
-    }
+//
+//    public void Logoutput(String data){
+//        Log.d(LOG_OUTPUT,data);
+//        tvload.append(data+"\n");
+//    }
 
     @Override
     protected void onStart() {
