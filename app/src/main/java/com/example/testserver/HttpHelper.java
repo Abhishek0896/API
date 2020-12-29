@@ -20,7 +20,11 @@ public class HttpHelper {
             connection.setDoInput(true);
             connection.setRequestMethod("GET");
 
-            connection.connect();
+            try {
+                connection.connect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             int responseCode = connection.getResponseCode();
             if (responseCode != 200) {

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.testserver.model.GIS;
 import com.example.testserver.model.User;
 import com.google.gson.Gson;
 
@@ -46,16 +47,18 @@ public class MyIntentService extends IntentService {
         }
 
         Gson gson = new Gson();
-        User[] example= gson.fromJson(data, User[].class);
-        sendMessagetoUI(example);
+
+        GIS gis= gson.fromJson(data,GIS.class);
+       int size= gis.getData().getSurveyCities().size();
+       String cityname = gis.getData().getSurveyCities().get(0).getName();
+        sendMessagetoUI("abbaa");
 //        Log.d("TESTING",example.getData().getItemId());
 
     }
 
-    private void sendMessagetoUI( User[] data) {
+    private void sendMessagetoUI( String data) {
         Intent intent = new Intent(SERVICE_MESSAGE);
         intent.putExtra(SERVICE_PAYLOAD,data);
-
         LocalBroadcastManager.getInstance(this)
                 .sendBroadcast(intent);
     }

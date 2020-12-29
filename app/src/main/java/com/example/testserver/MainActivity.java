@@ -15,9 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.testserver.model.GIS;
+
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_OUTPUT = "LOG_OUTPUT";
-    public static final String JSON_URL ="https://fortnite-api.theapinetwork.com/store/get/";
+    public static final String JSON_URL ="http://uatapi.upptax.org/api/configuration";
+    public static final String JSON_FORTNITE="https://fortnite-api.theapinetwork.com/store/get/";
     public static final String WEB_URL="https://jsonplaceholder.typicode.com/photos";
     TextView tvload;
     Button startbtn,btn;
@@ -25,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mreciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String data = intent.getStringExtra(MyIntentService.SERVICE_PAYLOAD);
-//            Logoutput(data);
+//            GIS gis = (GIS)intent.getParcelableExtra(MyIntentService.SERVICE_PAYLOAD);
+//            for(int i =0;i<gis.getData().getSurveyCities().size();i++)
+//                Logoutput( gis.getData().getSurveyCities().get(i).getName());
         }
     };
 
@@ -68,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 //
-//    public void Logoutput(String data){
-//        Log.d(LOG_OUTPUT,data);
-//        tvload.append(data+"\n");
-//    }
+    public void Logoutput(String data){
+        Log.d(LOG_OUTPUT,data);
+        tvload.append(data+"\n");
+    }
 
     @Override
     protected void onStart() {
