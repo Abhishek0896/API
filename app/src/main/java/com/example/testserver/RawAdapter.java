@@ -51,12 +51,24 @@ public class RawAdapter extends RecyclerView.Adapter<RawAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         User myusers = users.get(position);
         holder.uname.setText(users.get(position).getTitle());
-        if (drawable.containsKey(users.get(position).getTitle())) {
-            holder.uimg.setImageBitmap(drawable.get(users.get(position).getTitle()));
-        }else{
-            MyImageTask task = new MyImageTask();
-            task.setViewHolder(holder);
-            task.execute(myusers);
+//        if (drawable.containsKey(users.get(position).getTitle())) {
+//            holder.uimg.setImageBitmap(drawable.get(users.get(position).getTitle()));
+//        }else{
+//            MyImageTask task = new MyImageTask();
+//            task.setViewHolder(holder);
+//            task.execute(myusers);
+//        }
+        try{
+            Bitmap bitmap = CacheImageManager.getImage(context,myusers);
+            if(bitmap == null){
+                MyImageTask task = new MyImageTask();
+                task.setViewHolder(holder);
+                task.execute(myusers);
+            }else{
+                holder.uimg.setImageBitmap(bitmap);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -113,7 +125,8 @@ public class RawAdapter extends RecyclerView.Adapter<RawAdapter.MyViewHolder> {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             myViewHolder.uimg.setImageBitmap(bitmap);
-            drawable.put(muser.getTitle(), bitmap);
+            CacheImageManager.putImage(context,muser,bitmap);
+//            drawable.put(muser.getTitle(), bitmap);
         }
     }
 }
