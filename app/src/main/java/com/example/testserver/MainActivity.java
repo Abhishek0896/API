@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_OUTPUT = "LOG_OUTPUT";
     public static final String JSON_URL ="https://fortnite-api.theapinetwork.com/store/get/";
     TextView tvload;
-    Button startbtn;
+    Button startbtn,btn;
     boolean isNetwork;
     List<Example> exampleList = new ArrayList<>();
     private final BroadcastReceiver mreciever = new BroadcastReceiver() {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tvload = findViewById(R.id.tvload);
         startbtn = findViewById(R.id.startbtn);
+        btn = findViewById(R.id.btn);
 
         startbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +53,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         isNetwork = NetworkHelper.isNetworkAvailable(this);
-//        Logoutput("Network "+isNetwork);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST",(Serializable)exampleList);
+                intent.putExtra("BUNDLE",args);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -66,8 +79,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Logoutput(){
-        for(int i=0;i<exampleList.get(0).getData().size();i++){
-            tvload.append(""+exampleList.get(0).getData().get(i).getItem().getName()+"\n");
+        try {
+            for(int i=0;i<exampleList.get(0).getData().size();i++){
+                tvload.append(""+exampleList.get(0).getData().get(i).getItem().getName()+"\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
