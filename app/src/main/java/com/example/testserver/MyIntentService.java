@@ -2,23 +2,15 @@ package com.example.testserver;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MyIntentService extends IntentService {
@@ -45,11 +37,13 @@ public class MyIntentService extends IntentService {
 
         Gson gson = new Gson();
         Example example= gson.fromJson(data,Example.class);
-        Log.d("TESTING",example.getData().getItemId());
+        Log.d("TESTING",example.getData().get(0).getItemId());
+        sendMessagetoUI(example);
+
 
     }
 
-    private void sendMessagetoUI( String data) {
+    private void sendMessagetoUI( Example data) {
         Intent intent = new Intent(SERVICE_MESSAGE);
         intent.putExtra(SERVICE_PAYLOAD,data);
 

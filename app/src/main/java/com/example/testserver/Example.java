@@ -1,27 +1,36 @@
 package com.example.testserver;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Example {
+import java.util.List;
 
-    @SerializedName("lastUpdate")
-    @Expose
-    private Integer lastUpdate;
-    @SerializedName("lanuage")
-    @Expose
+public class Example implements Parcelable {
+    private int lastUpdate;
     private String lanuage;
-    @SerializedName("data")
-    @Expose
-    private Data data;
+    private List<Datum> data = null;
 
-    public Integer getLastUpdate() {
-        return lastUpdate;
+
+    protected Example(Parcel in) {
+        lastUpdate = in.readInt();
+        lanuage = in.readString();
+        data = in.createTypedArrayList(Datum.CREATOR);
     }
 
-    public void setLastUpdate(Integer lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+    public static final Creator<Example> CREATOR = new Creator<Example>() {
+        @Override
+        public Example createFromParcel(Parcel in) {
+            return new Example(in);
+        }
+
+        @Override
+        public Example[] newArray(int size) {
+            return new Example[size];
+        }
+    };
 
     public String getLanuage() {
         return lanuage;
@@ -31,12 +40,32 @@ public class Example {
         this.lanuage = lanuage;
     }
 
-    public Data getData() {
+    public List<Datum> getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(List<Datum> data) {
         this.data = data;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(lastUpdate);
+        dest.writeString(lanuage);
+        dest.writeTypedList(data);
+    }
+
+    public int getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(int lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }

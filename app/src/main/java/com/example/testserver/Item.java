@@ -1,60 +1,47 @@
 package com.example.testserver;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Item {
-
-    @SerializedName("name")
-    @Expose
+public class Item implements Parcelable {
     private String name;
-    @SerializedName("description")
-    @Expose
     private String description;
-    @SerializedName("type")
-    @Expose
     private String type;
-    @SerializedName("rarity")
-    @Expose
     private String rarity;
-    @SerializedName("series")
-    @Expose
     private Object series;
-    @SerializedName("cost")
-    @Expose
-    private Integer cost;
-    @SerializedName("upcoming")
-    @Expose
-    private Boolean upcoming;
-    @SerializedName("images")
-    @Expose
     private Images images;
-    @SerializedName("backpack")
-    @Expose
     private Backpack backpack;
-    @SerializedName("obtained")
-    @Expose
-    private String obtained;
-    @SerializedName("obtained_type")
-    @Expose
     private String obtainedType;
-    @SerializedName("ratings")
-    @Expose
     private Ratings ratings;
-    @SerializedName("media")
-    @Expose
-    private List<Medium> media = null;
-    @SerializedName("costmeticId")
-    @Expose
     private String costmeticId;
-    @SerializedName("obtainedValue")
-    @Expose
-    private String obtainedValue;
-    @SerializedName("obtainedFromBattlepass")
-    @Expose
-    private String obtainedFromBattlepass;
+
+    protected Item(Parcel in) {
+        name = in.readString();
+        description = in.readString();
+        type = in.readString();
+        rarity = in.readString();
+        images = in.readParcelable(Images.class.getClassLoader());
+        backpack = in.readParcelable(Backpack.class.getClassLoader());
+        obtainedType = in.readString();
+        costmeticId = in.readString();
+    }
+
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -96,22 +83,6 @@ public class Item {
         this.series = series;
     }
 
-    public Integer getCost() {
-        return cost;
-    }
-
-    public void setCost(Integer cost) {
-        this.cost = cost;
-    }
-
-    public Boolean getUpcoming() {
-        return upcoming;
-    }
-
-    public void setUpcoming(Boolean upcoming) {
-        this.upcoming = upcoming;
-    }
-
     public Images getImages() {
         return images;
     }
@@ -126,14 +97,6 @@ public class Item {
 
     public void setBackpack(Backpack backpack) {
         this.backpack = backpack;
-    }
-
-    public String getObtained() {
-        return obtained;
-    }
-
-    public void setObtained(String obtained) {
-        this.obtained = obtained;
     }
 
     public String getObtainedType() {
@@ -152,14 +115,6 @@ public class Item {
         this.ratings = ratings;
     }
 
-    public List<Medium> getMedia() {
-        return media;
-    }
-
-    public void setMedia(List<Medium> media) {
-        this.media = media;
-    }
-
     public String getCostmeticId() {
         return costmeticId;
     }
@@ -168,20 +123,20 @@ public class Item {
         this.costmeticId = costmeticId;
     }
 
-    public String getObtainedValue() {
-        return obtainedValue;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setObtainedValue(String obtainedValue) {
-        this.obtainedValue = obtainedValue;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(type);
+        dest.writeString(rarity);
+        dest.writeParcelable(images, flags);
+        dest.writeParcelable(backpack, flags);
+        dest.writeString(obtainedType);
+        dest.writeString(costmeticId);
     }
-
-    public String getObtainedFromBattlepass() {
-        return obtainedFromBattlepass;
-    }
-
-    public void setObtainedFromBattlepass(String obtainedFromBattlepass) {
-        this.obtainedFromBattlepass = obtainedFromBattlepass;
-    }
-
 }

@@ -15,17 +15,24 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_OUTPUT = "LOG_OUTPUT";
     public static final String JSON_URL ="https://fortnite-api.theapinetwork.com/store/get/";
     TextView tvload;
     Button startbtn;
     boolean isNetwork;
-    private BroadcastReceiver mreciever = new BroadcastReceiver() {
+    List<Example> exampleList = new ArrayList<>();
+    private final BroadcastReceiver mreciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String data = intent.getStringExtra(MyIntentService.SERVICE_PAYLOAD);
-            Logoutput(data);
+            Example data = (Example) intent.getParcelableExtra(MyIntentService.SERVICE_PAYLOAD);
+            exampleList = Arrays.asList(data);
+            Logoutput();
+
         }
     };
 
@@ -58,9 +65,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void Logoutput(String data){
-        Log.d(LOG_OUTPUT,data);
-        tvload.append(data+"\n");
+    public void Logoutput(){
+        for(int i=0;i<exampleList.get(0).getData().size();i++){
+            tvload.append(""+exampleList.get(0).getData().get(i).getItem().getName()+"\n");
+        }
     }
 
     @Override
