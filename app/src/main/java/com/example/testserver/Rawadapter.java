@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testserver.Models.Example;
+import com.example.testserver.utils.CacheImageManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

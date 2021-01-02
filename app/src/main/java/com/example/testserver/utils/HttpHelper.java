@@ -1,16 +1,25 @@
-package com.example.testserver;
+package com.example.testserver.utils;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpHelper {
+public class  HttpHelper {
 
-    public static String downloadUrl(String address) throws IOException {
+    public static String downloadUrl(RequestPackage requestPackage) throws IOException {
         InputStream inputStream = null;
+
+        String address =requestPackage.getEndpoint();
+        String encodedParams = requestPackage.getEncodedParams();
+
+        if(requestPackage.getRequestMethod().equals("GET") && encodedParams.length() >0){
+            address =String.format("%s?%s",address,encodedParams);
+        }
 
         try {
             URL url = new URL(address);
@@ -18,8 +27,15 @@ public class HttpHelper {
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(10000);
             connection.setDoInput(true);
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod(requestPackage.getRequestMethod());
 
+            if(requestPackage.getRequestMethod().equals("POST") &&
+                   encodedParams.length()>0 ){
+                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(requestPackage.getEncodedParams());
+                writer.flush();
+                writer.close();
+            }
             connection.connect();
 
             int responseCode = connection.getResponseCode();

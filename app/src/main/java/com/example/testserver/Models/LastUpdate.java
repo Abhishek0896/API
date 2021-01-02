@@ -1,4 +1,4 @@
-package com.example.testserver;
+package com.example.testserver.Models;
 
 import java.util.List;
 

@@ -1,12 +1,8 @@
-package com.example.testserver;
+package com.example.testserver.Models;
 
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class Item implements Parcelable {
     private String name;

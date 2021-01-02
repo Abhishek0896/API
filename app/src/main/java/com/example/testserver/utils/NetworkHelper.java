@@ -1,4 +1,4 @@
-package com.example.testserver;
+package com.example.testserver.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

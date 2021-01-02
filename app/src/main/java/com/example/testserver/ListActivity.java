@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.testserver.Models.Example;
+
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {

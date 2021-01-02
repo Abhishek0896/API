@@ -1,10 +1,7 @@
-package com.example.testserver;
+package com.example.testserver.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class Ratings implements Parcelable {
     private float avgStars;

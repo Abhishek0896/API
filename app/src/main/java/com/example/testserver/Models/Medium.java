@@ -1,4 +1,4 @@
-package com.example.testserver;
+package com.example.testserver.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
