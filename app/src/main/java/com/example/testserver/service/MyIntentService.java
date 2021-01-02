@@ -9,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.testserver.Models.Example;
 import com.example.testserver.Models.Information;
+import com.example.testserver.model.AuthApi;
 import com.example.testserver.utils.HttpHelper;
 import com.example.testserver.utils.RequestPackage;
 import com.google.gson.Gson;
@@ -35,20 +36,20 @@ public class MyIntentService extends IntentService {
                 (RequestPackage) intent.getParcelableExtra(SERVICE_REQUEST_PACKAGE);
 
 
-        Uri uri = intent.getData();
+//        Uri uri = intent.getData();
         String data;
         try {
             data = HttpHelper.downloadUrl(requestPackage);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }
         Gson gson = new Gson();
-        Information[] example= gson.fromJson(data,Information[].class);
+        AuthApi[] example= gson.fromJson(data,AuthApi[].class);
         sendMessagetoUI(example);
     }
 
-    private void sendMessagetoUI(Information[] data) {
+    private void sendMessagetoUI(AuthApi[] data) {
         Intent intent = new Intent(SERVICE_MESSAGE);
         intent.putExtra(SERVICE_PAYLOAD,data);
         LocalBroadcastManager.getInstance(this)

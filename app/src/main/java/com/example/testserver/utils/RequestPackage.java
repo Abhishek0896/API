@@ -10,7 +10,7 @@ import java.util.Map;
 public class RequestPackage implements Parcelable {
 
     private String endpoint;
-    private String requestMethod="GET";
+    private String method="GET";
     private Map<String,String> params= new HashMap<>();
 
     public RequestPackage() {
@@ -19,7 +19,14 @@ public class RequestPackage implements Parcelable {
 
     protected RequestPackage(Parcel in) {
         endpoint = in.readString();
-        requestMethod = in.readString();
+        method = in.readString();
+        int paramsSize = in.readInt();
+        this.params = new HashMap<String, String>(paramsSize);
+        for (int i = 0; i < paramsSize; i++) {
+            String key = in.readString();
+            String value = in.readString();
+            this.params.put(key, value);
+        }
     }
 
     public static final Creator<RequestPackage> CREATOR = new Creator<RequestPackage>() {
@@ -42,23 +49,24 @@ public class RequestPackage implements Parcelable {
         this.endpoint = endpoint;
     }
 
-    public String getRequestMethod() {
-        return requestMethod;
+    public String getMethod() {
+        return method;
     }
 
-    public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod;
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setParams(String key,String value) {
+        this.params.put(key,value);
     }
 
     public Map<String, String> getParams() {
         return params;
     }
 
-    public void setParams(String key, String value) {
-        this.params.put(key,value);
-    }
     public String getEncodedParams(){
-        this.setParams("province","Sindh");
+//        this.setParams("province","Sindh");
         StringBuilder sb = new StringBuilder();
         for(String key : params.keySet()){
             String value = null;
@@ -75,7 +83,6 @@ public class RequestPackage implements Parcelable {
         return sb.toString();
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -84,6 +91,11 @@ public class RequestPackage implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(endpoint);
-        dest.writeString(requestMethod);
+        dest.writeString(method);
+        dest.writeInt(this.params.size());
+        for (Map.Entry<String, String> entry : this.params.entrySet()) {
+            dest.writeString(entry.getKey());
+            dest.writeString(entry.getValue());
+        }
     }
 }

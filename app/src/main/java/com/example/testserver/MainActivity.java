@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.testserver.Models.Example;
 import com.example.testserver.Models.Information;
 import com.example.testserver.Models.Masscom;
+import com.example.testserver.model.AuthApi;
 import com.example.testserver.service.MyIntentService;
 import com.example.testserver.utils.NetworkHelper;
 import com.example.testserver.utils.RequestPackage;
@@ -43,19 +44,19 @@ public class MainActivity extends AppCompatActivity {
 //            exampleList=Arrays.asList(data);
 //            Logoutput();
 //            showData(data);
-            Information[] data = (Information[]) intent.getParcelableArrayExtra(MyIntentService.SERVICE_PAYLOAD);
-            for(Information city:data){
-                Logoutput(city.getCityname());
+            AuthApi[] data = (AuthApi[]) intent.getParcelableArrayExtra(MyIntentService.SERVICE_PAYLOAD);
+            for(AuthApi item:data){
+                Logoutput(item.getCityname());
             }
 
         }
     };
 
-    private void showData(Masscom masscom) {
-        for (int i = 0; i < masscom.getData().getSurveyCities().size(); i++) {
-            tvload.append(masscom.getData().getSurveyCities().get(i).getName() + "\n");
-        }
-    }
+//    private void showData(Masscom masscom) {
+//        for (int i = 0; i < masscom.getData().getSurveyCities().size(); i++) {
+//            tvload.append(masscom.getData().getSurveyCities().get(i).getName() + "\n");
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
             RequestPackage requestPackage = new RequestPackage();
             requestPackage.setEndpoint(MY_URL);
-            requestPackage.setRequestMethod("POST");
-            requestPackage.setParams("province","Sindh");
+            requestPackage.setMethod("GET");
+            requestPackage.setParams("province","Punjab");
+            requestPackage.setParams("id","2");
             Intent intent = new Intent(MainActivity.this, MyIntentService.class);
             intent.putExtra(MyIntentService.SERVICE_REQUEST_PACKAGE,requestPackage);
 //            intent.setData(Uri.parse(JSON_URL));

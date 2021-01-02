@@ -4,57 +4,67 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class  HttpHelper {
 
-    public static String downloadUrl(RequestPackage requestPackage) throws IOException {
+    public static String downloadUrl(RequestPackage requestPackage) throws Exception {
         InputStream inputStream = null;
 
         String address =requestPackage.getEndpoint();
         String encodedParams = requestPackage.getEncodedParams();
 
-        if(requestPackage.getRequestMethod().equals("GET") && encodedParams.length() >0){
+        if(requestPackage.getMethod().equals("GET") && encodedParams.length() >0){
             address =String.format("%s?%s",address,encodedParams);
         }
 
-        try {
-            URL url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(15000);
-            connection.setConnectTimeout(10000);
-            connection.setDoInput(true);
-            connection.setRequestMethod(requestPackage.getRequestMethod());
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder builder = new Request.Builder()
+                .url(address);
+        Request request = builder.build();
+        Response response = client.newCall(request).execute();
 
-            if(requestPackage.getRequestMethod().equals("POST") &&
-                   encodedParams.length()>0 ){
-                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-                writer.write(requestPackage.getEncodedParams());
-                writer.flush();
-                writer.close();
-            }
-            connection.connect();
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode != 200) {
-                throw new Exception("Error: Get response Code :" + responseCode);
-            }
-
-            inputStream = connection.getInputStream();
-            return readStream(inputStream);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(response.isSuccessful()){
+            return response.body().string();
+        }else {
+            throw new Exception("Error :Got response code"+response.code());
         }
-        finally {
-            if(inputStream != null){
-                inputStream.close();
-            }
-        }
-        return null;
+//        try {
+//            URL url = new URL(address);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setReadTimeout(15000);
+//            connection.setConnectTimeout(10000);
+//            connection.setDoInput(true);
+//            connection.setRequestMethod(requestPackage.getRequestMethod());
+//
+//            if(requestPackage.getRequestMethod().equals("POST") &&
+//                   encodedParams.length()>0 ){
+//                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+//                writer.write(requestPackage.getEncodedParams());
+//                writer.flush();
+//                writer.close();
+//            }
+//            connection.connect();
+//
+//            int responseCode = connection.getResponseCode();
+//            if (responseCode != 200) {
+//                throw new Exception("Error: Get response Code :" + responseCode);
+//            }
+//
+//            inputStream = connection.getInputStream();
+//            return readStream(inputStream);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        finally {
+//            if(inputStream != null){
+//                inputStream.close();
+//            }
+//        }
+//        return null;
     }
 
     private static String readStream(InputStream inputStream) throws IOException {
